@@ -3,120 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AJCJ Cloud - Pro v5.4</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <title>AJCJ Cloud - Visual AI Organizer v8.1</title>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
     <style>
-        :root { --primary: #FFD700; --bg: #0d0d0d; --card: rgba(26, 26, 26, 0.85); --text: #e0e0e0; --danger: #ff4d4d; }
+        :root { --primary: #FFD700; --bg: #0d0d0d; --card: #222; --text: #e0e0e0; --danger: #ff4d4d; --success: #28a745; }
         body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; display: flex; justify-content: center; min-height: 100vh; }
         .app-container { width: 100%; max-width: 600px; min-height: 100vh; background: #111; padding: 20px; box-sizing: border-box; border-left: 1px solid #333; border-right: 1px solid #333; position: relative; }
-        .screen { display: none; position: relative; z-index: 2; }
-        .active { display: block !important; }
+        
         #login-screen {
             height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
-            background-image: url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1600&auto=format&fit=crop'); 
-            background-size: cover; background-position: center; position: fixed; top: 0; left: 0; width: 100%; padding: 20px; box-sizing: border-box;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80') center/cover;
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 10;
         }
-        .login-box { background: rgba(17, 17, 17, 0.7); backdrop-filter: blur(10px); padding: 30px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); text-align: center; width: 100%; max-width: 360px; }
-        #main-app { padding-top: 20px; background-image: linear-gradient(rgba(17, 17, 17, 0.9), rgba(17, 17, 17, 0.9)), url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=1600&auto=format&fit=crop'); background-size: cover; background-position: center; background-attachment: fixed; min-height: 100vh; }
+        .login-box { background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); padding: 30px; border-radius: 20px; border: 1px solid var(--primary); text-align: center; width: 85%; }
+        
+        #main-app {
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80') center/cover fixed;
+            min-height: 100vh; padding-top: 10px; display: none;
+        }
+
         input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid #333; background: #222; color: white; box-sizing: border-box; outline: none; }
-        .btn-main { width: 100%; padding: 16px; border-radius: 12px; border: none; background: var(--primary); font-weight: bold; cursor: pointer; color: black; font-size: 1rem; text-transform: uppercase; margin-top: 10px; transition: 0.2s; }
-        .file-upload { background: rgba(26, 26, 26, 0.5); border: 2px dashed #444; padding: 30px; text-align: center; border-radius: 20px; cursor: pointer; margin: 15px 0; display: block; color: var(--primary); font-weight: bold; }
-        .folder-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin: 20px 0; }
-        .folder { background: var(--card); padding: 15px; border-radius: 15px; text-align: center; cursor: pointer; border-bottom: 4px solid #333; position: relative; }
-        .count-badge { background: var(--primary); color: black; padding: 2px 7px; border-radius: 8px; font-size: 0.7em; font-weight: bold; }
+        .btn-main { width: 100%; padding: 16px; border-radius: 12px; border: none; background: var(--primary); font-weight: bold; cursor: pointer; color: black; margin-top: 10px; font-size: 1rem; }
         
-        .song-item { background: rgba(30, 30, 30, 0.7); padding: 15px; margin: 12px 0; border-radius: 15px; border-left: 5px solid var(--primary); position: relative; }
+        .file-upload-box { background: rgba(26,26,26,0.6); padding: 15px; border-radius: 20px; margin-bottom: 10px; border: 1px solid #333; }
+        .file-upload { display: block; text-align: center; padding: 20px; border: 2px dashed #444; border-radius: 15px; cursor: pointer; color: var(--primary); font-weight: bold; }
+
+        .folder-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
+        .folder { background: var(--card); padding: 15px; border-radius: 12px; text-align: center; cursor: pointer; border: 1px solid #333; position: relative; }
+        .count-badge { background: var(--primary); color: black; padding: 2px 7px; border-radius: 8px; font-size: 0.7em; font-weight: bold; margin-top: 5px; display: inline-block; }
+        
+        h3#viewTitle { border-left: 4px solid var(--primary); padding-left: 10px; margin: 20px 0 10px 0; font-size: 1.1rem; }
+
+        .song-item { background: #1a1a1a; padding: 15px; margin: 10px 0; border-radius: 15px; position: relative; border: 1px solid #333; }
+        .song-title { color: white; font-weight: bold; font-size: 0.95rem; margin-bottom: 5px; display: block; padding-right: 25px; }
+        
+        audio { width: 100%; margin-top: 5px; filter: invert(100%); height: 35px; }
+        
         .actions-box { display: flex; gap: 10px; margin-top: 10px; }
-        .btn-action { flex: 1; padding: 8px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; font-size: 0.8rem; }
-        .btn-dl { background: #28a745; color: white; }
+        .btn-action { flex: 1; padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; font-size: 0.85rem; text-transform: uppercase; }
+        .btn-dl { background: var(--success); color: white; }
         .btn-del { background: var(--danger); color: white; }
-        
-        .btn-folder-dl { background: var(--primary); color: black; padding: 10px; border-radius: 10px; margin-bottom: 15px; width: 100%; border: none; font-weight: bold; cursor: pointer; display: none; }
-        
-        audio { width: 100%; margin-top: 5px; height: 35px; filter: invert(100%); }
-        .visitor-counter { text-align: center; font-size: 0.8rem; opacity: 0.6; margin-top: 20px; color: white; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
-    <div id="login-screen" class="screen active">
+    <div id="login-screen">
         <div class="login-box">
             <h1 style="color:var(--primary); margin:0;">AJCJ CLOUD</h1>
+            <p style="font-size:0.8rem; color:#aaa;">Visual AI Organizer v8.1</p>
             <input type="text" id="userName" placeholder="Nombre de usuario">
             <button class="btn-main" onclick="startApp()">ACCEDER</button>
-            <div class="visitor-counter">Visitas: <img src="https://counter9.optistats.ovh/private/contadorvisitasgratis.php?c=9l8z6k1m3p4yq8u7b6r5t4e3w2q1a" border="0"></div>
         </div>
     </div>
 
-    <div id="main-app" class="screen">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-            <h2 id="welcomeText" style="color:var(--primary); font-size: 1rem;"></h2>
+    <div id="main-app">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <h2 id="welcomeText" style="color:var(--primary); font-size: 0.9rem;"></h2>
             <button onclick="logout()" style="color:red; background:none; border:none; font-weight:bold;">SALIR</button>
         </div>
 
-        <div style="background: rgba(26,26,26,0.6); padding: 15px; border-radius: 20px;">
+        <div class="file-upload-box">
             <label class="file-upload">
                 <span id="fileStatus">📁 SUBIR MUSICA</span>
-                <input type="file" id="audioFiles" accept="audio/*" multiple style="display:none" onchange="updateLabel(this)">
+                <input type="file" id="audioFiles" accept="audio/*" multiple style="display:none" onchange="document.getElementById('fileStatus').innerText = this.files.length + ' LISTOS'">
             </label>
-            <button class="btn-main" onclick="uploadMultiple()">ORGANIZAR AHORA</button>
+            <button class="btn-main" onclick="uploadToCloud()">ORGANIZAR AHORA</button>
         </div>
 
         <div class="folder-grid" id="folderGrid"></div>
         
-        <button id="downloadFolderBtn" class="btn-folder-dl" onclick="downloadCurrentFolder()">📥 DESCARGAR CARPETA (.ZIP)</button>
-        
-        <h3 id="viewTitle" style="border-left: 4px solid var(--primary); padding-left: 10px;">Biblioteca</h3>
+        <h3 id="viewTitle">Biblioteca Global</h3>
         <div id="musicList"></div>
     </div>
 </div>
 
 <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCEiAw70YC20T00KUwhBIIFENmHRgHAYD8",
+      authDomain: "ajcj-cloud-629bf.firebaseapp.com",
+      projectId: "ajcj-cloud-629bf",
+      storageBucket: "ajcj-cloud-629bf.firebasestorage.app",
+      messagingSenderId: "927498286564",
+      appId: "1:927498286564:web:5fee7a3e4b47cbfdca43f1"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const storage = firebase.storage();
+    const db = firebase.database();
+
     let library = [];
     let currentFilteredGenre = null;
-    const allGenres = ["Vallenato", "Trap/Drill", "Tech House", "Afro House", "Mambo", "Merengue", "Deep House", "Hip Hop US", "Pop", "Pop Global", "Reguetón", "Dembow", "Salsa Baúl", "Bachata", "Techno/EDM"];
+    
+    // LISTA ACTUALIZADA SIN DEMBOW CRISTIANO NI CORRIDOS
+    const allGenres = ["Salsa", "Salsa Baúl", "Bachata", "Vallenato", "Trap/Drill", "Tech House", "Deep House", "Hip Hop US", "Afrobeats", "Pop Global", "Rock/Indie", "80s/90s Hits"];
 
     const keywords = {
-        "Dembow": ["jey one", "yaisel", "el alfa", "rochy", "dembow", "chimbala"],
-        "Salsa Baúl": ["baul", "salsa baul", "roberto antonio", "hildemaro"],
-        "Tech House": ["fisher", "tech house", "paco osuna"],
-        "Afro House": ["afro house", "keinemusik", "black coffee"],
-        "Mambo": ["omega", "mambo", "sujeto", "ala jaza"],
-        "Merengue": ["merengue", "elvis crespo", "juan luis guerra"]
+        "Salsa Baúl": ["baul"], "Salsa": ["salsa"],
+        "Bachata": ["bachata"], "Vallenato": ["diomedes", "vallenato"],
+        "Trap/Drill": ["trap", "drill"], "Tech House": ["tech"], "Deep House": ["deep"],
+        "Hip Hop US": ["hiphop"], "Afrobeats": ["afro"], "Pop Global": ["pop"],
+        "Rock/Indie": ["rock"], "80s/90s Hits": ["80s", "90s"]
     };
 
     window.onload = () => {
         const savedUser = localStorage.getItem('ajcj_user');
-        if (savedUser) { document.getElementById('userName').value = savedUser; startApp(true); }
+        if (savedUser) { document.getElementById('userName').value = savedUser; startApp(); }
     };
 
     function startApp() {
         const name = document.getElementById('userName').value;
         if(!name) return;
         localStorage.setItem('ajcj_user', name);
-        document.getElementById('login-screen').classList.remove('active');
-        document.getElementById('main-app').classList.add('active');
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('main-app').style.display = 'block';
         document.getElementById('welcomeText').innerText = "HOLA, " + name.toUpperCase();
-        renderFolders();
+        loadCloudData();
     }
 
     function logout() { localStorage.removeItem('ajcj_user'); location.reload(); }
 
-    function updateLabel(input) { document.getElementById('fileStatus').innerText = `✅ ${input.files.length} LISTOS`; }
-
-    function uploadMultiple() {
+    async function uploadToCloud() {
         const files = document.getElementById('audioFiles').files;
-        if(files.length === 0) return;
-        for(let i = 0; i < files.length; i++) {
-            if (library.some(s => s.fileName === files[i].name)) continue;
-            let title = files[i].name.replace(/\.[^/.]+$/, "").replace(/[_-]/g, " ");
+        if(!files.length) return;
+        document.getElementById('fileStatus').innerText = "SUBIENDO...";
+
+        for(let file of files) {
+            let title = file.name.replace(/\.[^/.]+$/, "").replace(/[_-]/g, " ");
             let genre = "Pop Global";
             for (let g in keywords) { if (keywords[g].some(k => title.toLowerCase().includes(k))) { genre = g; break; } }
-            library.push({ id: Date.now() + i, title: title, fileName: files[i].name, genre: genre, url: URL.createObjectURL(files[i]), blob: files[i] });
+            
+            const storageRef = storage.ref(`musica/${file.name}`);
+            await storageRef.put(file);
+            const url = await storageRef.getDownloadURL();
+            db.ref('songs').push({ title: title, fileName: file.name, genre: genre, url: url });
         }
-        renderFolders();
-        showSongs(library, "Biblioteca Global");
+        document.getElementById('fileStatus').innerText = "📁 SUBIR MUSICA";
+        document.getElementById('audioFiles').value = "";
+    }
+
+    function loadCloudData() {
+        db.ref('songs').on('value', snapshot => {
+            library = [];
+            snapshot.forEach(child => { library.push({ id: child.key, ...child.val() }); });
+            renderFolders();
+            if(currentFilteredGenre) filterBy(currentFilteredGenre);
+            else showSongs(library, "Biblioteca Global");
+        });
     }
 
     function renderFolders() {
@@ -124,26 +159,22 @@
         grid.innerHTML = "";
         allGenres.forEach(g => {
             const count = library.filter(s => s.genre === g).length;
-            grid.innerHTML += `<div class="folder" onclick="filterBy('${g}')"><b>${g}</b><br><span class="count-badge">${count}</span></div>`;
+            grid.innerHTML += `<div class="folder" onclick="filterBy('${g}')"><b>📁 ${g}</b><br><span class="count-badge">${count}</span></div>`;
         });
     }
 
     function showSongs(list, title) {
         document.getElementById('viewTitle').innerText = title;
         const container = document.getElementById('musicList');
-        const dlBtn = document.getElementById('downloadFolderBtn');
-        
-        dlBtn.style.display = (currentFilteredGenre && list.length > 0) ? "block" : "none";
-        container.innerHTML = list.length ? "" : "<p style='opacity:0.3;'>Vacio</p>";
-        
+        container.innerHTML = list.length ? "" : "<p style='opacity:0.3; text-align:center;'>Vacío</p>";
         list.forEach(s => {
             container.innerHTML += `
-                <div class="song-item" id="song-${s.id}">
-                    <strong>${s.title}</strong>
+                <div class="song-item">
+                    <span class="song-title">${s.title}</span>
                     <audio controls src="${s.url}"></audio>
                     <div class="actions-box">
-                        <button class="btn-action btn-dl" onclick="downloadSong('${s.url}', '${s.fileName}')">DESCARGAR</button>
-                        <button class="btn-action btn-del" onclick="deleteSong(${s.id})">ELIMINAR</button>
+                        <button class="btn-action btn-dl" onclick="window.open('${s.url}')">DESCARGAR</button>
+                        <button class="btn-action btn-del" onclick="deleteSong('${s.id}', '${s.fileName}')">ELIMINAR</button>
                     </div>
                 </div>`;
         });
@@ -151,35 +182,10 @@
 
     function filterBy(g) { currentFilteredGenre = g; showSongs(library.filter(s => s.genre === g), "Carpeta: " + g); }
 
-    function deleteSong(id) {
-        if(!confirm("¿Eliminar canción?")) return;
-        library = library.filter(s => s.id !== id);
-        renderFolders();
-        if(currentFilteredGenre) filterBy(currentFilteredGenre);
-        else showSongs(library, "Biblioteca Global");
-    }
-
-    function downloadSong(url, name) {
-        const a = document.createElement('a');
-        a.href = url; a.download = name; a.click();
-    }
-
-    async function downloadCurrentFolder() {
-        const songs = library.filter(s => s.genre === currentFilteredGenre);
-        if(!songs.length) return;
-        
-        const zip = new JSZip();
-        const folder = zip.folder(currentFilteredGenre);
-        
-        alert("Comprimiendo carpeta... espera un momento.");
-        
-        songs.forEach(s => { folder.file(s.fileName, s.blob); });
-        
-        const content = await zip.generateAsync({type:"blob"});
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(content);
-        a.download = `AJCJ_${currentFilteredGenre}.zip`;
-        a.click();
+    function deleteSong(id, fileName) {
+        if(!confirm("¿Eliminar canción de la nube?")) return;
+        db.ref('songs/' + id).remove();
+        storage.ref(`musica/${fileName}`).delete();
     }
 </script>
 </body>

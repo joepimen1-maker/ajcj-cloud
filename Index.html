@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AJCJ Cloud - Pro v5.0</title>
+    <title>AJCJ Cloud - Pro v5.1</title>
     <style>
         :root { --primary: #FFD700; --bg: #0d0d0d; --card: rgba(26, 26, 26, 0.85); --text: #e0e0e0; }
         
@@ -11,11 +11,9 @@
         
         .app-container { width: 100%; max-width: 600px; min-height: 100vh; background: #111; padding: 20px; box-sizing: border-box; border-left: 1px solid #333; border-right: 1px solid #333; position: relative; }
 
-        /* Pantallas */
         .screen { display: none; position: relative; z-index: 2; }
         .active { display: block !important; }
 
-        /* --- IMÁGENES DE FONDO --- */
         #login-screen {
             height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
             background-image: url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1600&auto=format&fit=crop'); 
@@ -31,22 +29,19 @@
             background-size: cover; background-position: center; background-attachment: fixed; min-height: 100vh;
         }
 
-        /* --- COMPONENTES --- */
         input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid #333; background: #222; color: white; box-sizing: border-box; outline: none; }
         .btn-main { width: 100%; padding: 16px; border-radius: 12px; border: none; background: var(--primary); font-weight: bold; cursor: pointer; color: black; font-size: 1rem; text-transform: uppercase; margin-top: 10px; transition: 0.2s; box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3); }
-        .btn-main:active { transform: scale(0.98); }
         
         .file-upload { background: rgba(26, 26, 26, 0.5); border: 2px dashed #444; padding: 30px; text-align: center; border-radius: 20px; cursor: pointer; margin: 15px 0; display: block; color: var(--primary); font-weight: bold; backdrop-filter: blur(5px); }
         
         .folder-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin: 20px 0; }
         .folder { background: var(--card); padding: 15px; border-radius: 15px; text-align: center; cursor: pointer; border-bottom: 4px solid #333; transition: 0.3s; backdrop-filter: blur(5px); }
-        .folder:hover { border-color: var(--primary); background: rgba(34, 34, 34, 0.9); transform: translateY(-3px); }
+        .folder:hover { border-color: var(--primary); transform: translateY(-3px); }
         .count-badge { background: var(--primary); color: black; padding: 2px 7px; border-radius: 8px; font-size: 0.7em; font-weight: bold; }
 
         .song-item { background: rgba(30, 30, 30, 0.7); padding: 15px; margin: 12px 0; border-radius: 15px; border-left: 5px solid var(--primary); backdrop-filter: blur(5px); }
         audio { width: 100%; margin-top: 10px; height: 35px; filter: invert(100%); }
 
-        /* Comentarios */
         .comment-section { background: rgba(26, 26, 26, 0.8); padding: 15px; border-radius: 20px; margin-top: 30px; border: 1px solid #444; backdrop-filter: blur(10px); }
         .comment-item { border-bottom: 1px solid #333; padding: 10px 0; font-size: 0.9rem; }
         
@@ -59,12 +54,11 @@
     <div id="login-screen" class="screen active">
         <div class="login-box">
             <h1 style="color:var(--primary); font-size: 2.4rem; margin: 0;">AJCJ CLOUD</h1>
-            <p style="opacity: 0.8; margin-top: 5px; font-size: 0.9rem;">Organizador Inteligente v5.0</p>
+            <p style="opacity: 0.8; margin-top: 5px; font-size: 0.9rem;">Organizador Inteligente v5.1</p>
             <input type="text" id="userName" placeholder="Nombre de usuario">
             <button class="btn-main" onclick="startApp()">ACCEDER</button>
-            
             <div class="visitor-counter">
-                Visitas totales: <img src="https://counter9.optistats.ovh/private/contadorvisitasgratis.php?c=9l8z6k1m3p4yq8u7b6r5t4e3w2q1a" title="contador de visitas" alt="contador de visitas">
+                Visitas totales: <img src="https://counter9.optistats.ovh/private/contadorvisitasgratis.php?c=9l8z6k1m3p4yq8u7b6r5t4e3w2q1a" border="0">
             </div>
         </div>
     </div>
@@ -101,14 +95,15 @@
 
 <script>
     let library = [];
-    const allGenres = ["Reguetón", "Dembow", "Dembow Cristiano", "Salsa Baúl", "Bachata", "Corridos", "Tech House", "Pop Global", "80s/90s Hits"];
+    // Lista actualizada: quitamos Dembow Cristiano y Corridos, restauramos las anteriores
+    const allGenres = ["Vallenato", "Trap/Drill", "Tech House", "Deep House", "Hip Hop US", "Pop Global", "Rock/Indie", "Techno/EDM", "Reguetón", "Dembow", "Salsa Baúl", "Bachata"];
 
     const keywords = {
         "Dembow": ["jey one", "yaisel", "el alfa", "rochy", "dembow"],
-        "Dembow Cristiano": ["redimi2", "philippe", "madiel lara"],
         "Salsa Baúl": ["baul", "salsa baul", "roberto antonio", "hildemaro"],
-        "Corridos": ["peso pluma", "natanael", "junior h", "corridos"],
-        "Tech House": ["fisher", "tech house", "paco osuna"]
+        "Tech House": ["fisher", "tech house", "paco osuna"],
+        "Trap/Drill": ["drill", "trap", "eladio", "bryant myers"],
+        "Vallenato": ["diomedes", "silvestre", "vallenato"]
     };
 
     function startApp() {
@@ -178,4 +173,5 @@
     }
 </script>
 </body>
-</html>
+            </html>
+                                                                        

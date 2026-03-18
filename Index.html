@@ -3,31 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AJCJ Cloud - Real Cloud v6.0</title>
+    <title>AJCJ Cloud - Pro</title>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <style>
         :root { --primary: #FFD700; --bg: #0d0d0d; --card: rgba(26, 26, 26, 0.85); --text: #e0e0e0; --danger: #ff4d4d; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; display: flex; justify-content: center; min-height: 100vh; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; display: flex; justify-content: center; min-height: 100vh; }
         .app-container { width: 100%; max-width: 600px; min-height: 100vh; background: #111; padding: 20px; box-sizing: border-box; border-left: 1px solid #333; border-right: 1px solid #333; }
         .screen { display: none; }
         .active { display: block !important; }
-        #login-screen { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; background: url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80') center/cover; }
-        .login-box { background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); padding: 30px; border-radius: 20px; border: 1px solid var(--primary); text-align: center; width: 85%; }
-        input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid #333; background: #222; color: white; box-sizing: border-box; }
-        .btn-main { width: 100%; padding: 16px; border-radius: 12px; border: none; background: var(--primary); font-weight: bold; cursor: pointer; color: black; margin-top: 10px; }
-        .progress-container { width: 100%; background: #222; border-radius: 10px; margin: 10px 0; display: none; }
-        #progressBar { width: 0%; height: 10px; background: var(--primary); border-radius: 10px; transition: 0.3s; }
+        #login-screen {
+            height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80') center/cover;
+        }
+        .login-box { background: rgba(17, 17, 17, 0.8); backdrop-filter: blur(10px); padding: 30px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); text-align: center; width: 85%; }
+        input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid #333; background: #222; color: white; box-sizing: border-box; outline: none; }
+        .btn-main { width: 100%; padding: 16px; border-radius: 12px; border: none; background: var(--primary); font-weight: bold; cursor: pointer; color: black; margin-top: 10px; transition: 0.2s; }
+        .file-upload { background: rgba(26, 26, 26, 0.5); border: 2px dashed #444; padding: 30px; text-align: center; border-radius: 20px; cursor: pointer; margin: 15px 0; display: block; color: var(--primary); font-weight: bold; }
         .folder-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin: 20px 0; }
         .folder { background: var(--card); padding: 15px; border-radius: 15px; text-align: center; cursor: pointer; border-bottom: 4px solid #333; }
         .count-badge { background: var(--primary); color: black; padding: 2px 7px; border-radius: 8px; font-size: 0.7em; }
-        .song-item { background: rgba(30,30,30,0.7); padding: 15px; margin: 12px 0; border-radius: 15px; border-left: 5px solid var(--primary); position: relative; }
-        .actions { display: flex; gap: 10px; margin-top: 10px; }
-        .btn-dl { background: #28a745; color: white; flex: 1; padding: 8px; border-radius: 5px; border: none; font-weight: bold; }
-        .btn-del { background: var(--danger); color: white; flex: 1; padding: 8px; border-radius: 5px; border: none; font-weight: bold; }
-        audio { width: 100%; margin-top: 5px; filter: invert(100%); }
+        .song-item { background: rgba(30, 30, 30, 0.7); padding: 15px; margin: 12px 0; border-radius: 15px; border-left: 5px solid var(--primary); }
+        .actions-box { display: flex; gap: 10px; margin-top: 10px; }
+        .btn-action { flex: 1; padding: 8px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; font-size: 0.8rem; }
+        .btn-dl { background: #28a745; color: white; }
+        .btn-del { background: var(--danger); color: white; }
+        audio { width: 100%; margin-top: 5px; height: 35px; filter: invert(100%); }
     </style>
 </head>
 <body>
@@ -35,36 +38,35 @@
 <div class="app-container">
     <div id="login-screen" class="screen active">
         <div class="login-box">
-            <h1 style="color:var(--primary);">AJCJ CLOUD</h1>
+            <h1 style="color:var(--primary); margin:0;">AJCJ CLOUD</h1>
             <input type="text" id="userName" placeholder="Nombre de usuario">
-            <button class="btn-main" onclick="startApp()">ENTRAR A LA NUBE</button>
+            <button class="btn-main" onclick="startApp()">ACCEDER</button>
         </div>
     </div>
 
     <div id="main-app" class="screen">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <h2 id="welcomeText" style="color:var(--primary); font-size: 0.9rem;"></h2>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+            <h2 id="welcomeText" style="color:var(--primary); font-size: 1rem;"></h2>
             <button onclick="logout()" style="color:red; background:none; border:none; font-weight:bold;">SALIR</button>
         </div>
 
         <div style="background: rgba(26,26,26,0.6); padding: 15px; border-radius: 20px;">
-            <label style="display:block; text-align:center; padding:20px; border:2px dashed #444; border-radius:15px; cursor:pointer;">
-                <span id="fileStatus">📁 SELECCIONAR MÚSICA</span>
+            <label class="file-upload">
+                <span id="fileStatus">📁 SUBIR MUSICA</span>
                 <input type="file" id="audioFiles" accept="audio/*" multiple style="display:none" onchange="document.getElementById('fileStatus').innerText = this.files.length + ' LISTOS'">
             </label>
-            <div class="progress-container" id="pContainer"><div id="progressBar"></div></div>
-            <button class="btn-main" onclick="uploadToFirebase()">SUBIR A LA NUBE REAL</button>
+            <button class="btn-main" onclick="uploadToCloud()">ORGANIZAR EN LA NUBE</button>
         </div>
 
         <div class="folder-grid" id="folderGrid"></div>
-        <button id="dlZip" class="btn-main" style="display:none; background:#444; color:white;" onclick="downloadZip()">📥 DESCARGAR CARPETA .ZIP</button>
-        <h3 id="viewTitle" style="border-left: 4px solid var(--primary); padding-left: 10px;">Biblioteca Global</h3>
+        <button id="btnZip" class="btn-main" style="display:none; background:#333; color:white;" onclick="downloadZip()">📥 DESCARGAR CARPETA (.ZIP)</button>
+        <h3 id="viewTitle" style="border-left: 4px solid var(--primary); padding-left: 10px;">Biblioteca</h3>
         <div id="musicList"></div>
     </div>
 </div>
 
 <script>
-    // TU CONFIGURACIÓN DE FIREBASE
+    // CONFIGURACIÓN PRIVADA
     const firebaseConfig = {
       apiKey: "AIzaSyCEiAw70YC20T00KUwhBIIFENmHRgHAYD8",
       authDomain: "ajcj-cloud-629bf.firebaseapp.com",
@@ -79,12 +81,12 @@
     const db = firebase.database();
 
     let library = [];
-    let currentGenre = null;
+    let currentFilteredGenre = null;
     const allGenres = ["Vallenato", "Trap/Drill", "Tech House", "Afro House", "Mambo", "Merengue", "Deep House", "Hip Hop US", "Pop", "Pop Global", "Reguetón", "Dembow", "Salsa Baúl", "Bachata", "Techno/EDM"];
 
     window.onload = () => {
-        const user = localStorage.getItem('ajcj_user');
-        if(user) { document.getElementById('userName').value = user; startApp(); }
+        const savedUser = localStorage.getItem('ajcj_user');
+        if (savedUser) { document.getElementById('userName').value = savedUser; startApp(); }
     };
 
     function startApp() {
@@ -93,51 +95,42 @@
         localStorage.setItem('ajcj_user', name);
         document.getElementById('login-screen').classList.remove('active');
         document.getElementById('main-app').classList.add('active');
-        document.getElementById('welcomeText').innerText = "DJ: " + name.toUpperCase();
-        loadFromCloud();
+        document.getElementById('welcomeText').innerText = "HOLA, " + name.toUpperCase();
+        loadCloudData();
     }
 
     function logout() { localStorage.removeItem('ajcj_user'); location.reload(); }
 
-    async function uploadToFirebase() {
+    async function uploadToCloud() {
         const files = document.getElementById('audioFiles').files;
-        if(!files.length) return alert("Selecciona música");
+        if(!files.length) return;
         
-        document.getElementById('pContainer').style.display = "block";
-        const bar = document.getElementById('progressBar');
+        document.getElementById('fileStatus').innerText = "SUBIENDO...";
 
-        for(let i = 0; i < files.length; i++) {
-            const file = files[i];
-            if(library.some(s => s.name === file.name)) continue;
-
+        for(let file of files) {
             let genre = "Pop Global";
-            const title = file.name.toLowerCase();
-            if(title.includes("omega") || title.includes("mambo")) genre = "Mambo";
-            if(title.includes("merengue")) genre = "Merengue";
-            if(title.includes("afro")) genre = "Afro House";
-            if(title.includes("baul")) genre = "Salsa Baúl";
+            const t = file.name.toLowerCase();
+            if(t.includes("mambo") || t.includes("omega")) genre = "Mambo";
+            if(t.includes("baul")) genre = "Salsa Baúl";
+            if(t.includes("afro")) genre = "Afro House";
 
-            const storageRef = storage.ref(`musica/${file.name}`);
-            const task = storageRef.put(file);
-
-            task.on('state_changed', 
-                snapshot => { bar.style.width = (snapshot.bytesTransferred / snapshot.totalBytes) * 100 + "%"; },
-                err => alert("Error al subir"),
-                async () => {
-                    const url = await storageRef.getDownloadURL();
-                    const songData = { name: file.name, genre: genre, url: url, time: Date.now() };
-                    db.ref('songs').push(songData);
-                }
-            );
+            const ref = storage.ref(`musica/${file.name}`);
+            await ref.put(file);
+            const url = await ref.getDownloadURL();
+            
+            db.ref('songs').push({ name: file.name, genre: genre, url: url });
         }
+        document.getElementById('fileStatus').innerText = "📁 SUBIR MUSICA";
+        document.getElementById('audioFiles').value = "";
     }
 
-    function loadFromCloud() {
-        db.ref('songs').on('value', snapshot => {
+    function loadCloudData() {
+        db.ref('songs').on('value', snap => {
             library = [];
-            snapshot.forEach(child => { library.push({id: child.key, ...child.val()}); });
+            snap.forEach(child => { library.push({id: child.key, ...child.val()}); });
             renderFolders();
-            showSongs(library, "Biblioteca Global");
+            if(currentFilteredGenre) filterBy(currentFilteredGenre);
+            else showSongs(library, "Biblioteca Global");
         });
     }
 
@@ -153,42 +146,44 @@
     function showSongs(list, title) {
         document.getElementById('viewTitle').innerText = title;
         const container = document.getElementById('musicList');
-        document.getElementById('dlZip').style.display = (currentGenre && list.length) ? "block" : "none";
-        container.innerHTML = list.length ? "" : "<p style='text-align:center; opacity:0.3;'>No hay canciones</p>";
+        document.getElementById('btnZip').style.display = (currentFilteredGenre && list.length) ? "block" : "none";
+        container.innerHTML = list.length ? "" : "<p style='opacity:0.3; text-align:center;'>Vacío</p>";
+        
         list.forEach(s => {
             container.innerHTML += `
                 <div class="song-item">
                     <strong>${s.name}</strong>
                     <audio controls src="${s.url}"></audio>
-                    <div class="actions">
-                        <button class="btn-dl" onclick="window.open('${s.url}')">DESCARGAR</button>
-                        <button class="btn-del" onclick="deleteFromCloud('${s.id}', '${s.name}')">BORRAR</button>
+                    <div class="actions-box">
+                        <button class="btn-action btn-dl" onclick="window.open('${s.url}')">DESCARGAR</button>
+                        <button class="btn-action btn-del" onclick="deleteSong('${s.id}', '${s.name}')">ELIMINAR</button>
                     </div>
                 </div>`;
         });
     }
 
-    function filterBy(g) { currentGenre = g; showSongs(library.filter(s => s.genre === g), "Carpeta: " + g); }
+    function filterBy(g) { currentFilteredGenre = g; showSongs(library.filter(s => s.genre === g), "Carpeta: " + g); }
 
-    function deleteFromCloud(id, fileName) {
-        if(!confirm("¿Borrar de la nube?")) return;
-        db.ref('songs/' + id).remove();
-        storage.ref(`musica/${fileName}`).delete();
+    function deleteSong(id, name) {
+        if(confirm("¿Borrar canción de la nube?")) {
+            db.ref('songs/' + id).remove();
+            storage.ref(`musica/${name}`).delete();
+        }
     }
 
     async function downloadZip() {
         const zip = new JSZip();
-        const songs = library.filter(s => s.genre === currentGenre);
-        alert("Preparando descarga de la carpeta...");
+        const songs = library.filter(s => s.genre === currentFilteredGenre);
+        alert("Comprimiendo carpeta...");
         for(let s of songs) {
-            const resp = await fetch(s.url);
-            const blob = await resp.blob();
+            const res = await fetch(s.url);
+            const blob = await res.blob();
             zip.file(s.name, blob);
         }
         const content = await zip.generateAsync({type:"blob"});
         const a = document.createElement('a');
         a.href = URL.createObjectURL(content);
-        a.download = `AJCJ_${currentGenre}.zip`;
+        a.download = `AJCJ_${currentFilteredGenre}.zip`;
         a.click();
     }
 </script>
